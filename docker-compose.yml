@@ -1,0 +1,11 @@
+version: '3.9'
+services:
+  postgres:
+    container_name: postgres_ead_user
+    image: postgres:15.0-alpine
+    environment:
+      - POSTGRES_USER=decoder
+      - POSTGRES_PASSWORD=decoder
+      - POSTGRES_DB=ead_user
+    ports:
+      - "15432:5432"
