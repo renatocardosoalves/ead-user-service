@@ -6,3 +6,13 @@ spring:
     url: jdbc:postgresql://localhost:15432/ead_user
     username: decoder
     password: decoder
+  jpa:
+    hibernate:
+      ddl-auto: update
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+      jdbc:
+        lob:
+          non-contextual-creation: true
+    properties:
+      hibernate:
+        show_sql: true
