@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -17,6 +19,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserModel> findAll() {
         return this.userRepository.findAll();
+    }
+
+    @Override
+    public Optional<UserModel> findById(UUID userId) {
+        return this.userRepository.findById(userId);
     }
 
 }

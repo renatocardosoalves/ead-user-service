@@ -9,11 +9,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static com.github.renatocardosoalves.decoder.databuilders.UserModelBuilder.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
@@ -58,4 +59,49 @@ class UserServiceImplTest {
         assertThat(expectedUsers)
                 .containsAll(users);
     }
+
+    @Test
+    @DisplayName("Should return a user optional with existing id")
+    void shouldReturnAUserOptionalWithExistingId() {
+        var userId = UUID.randomUUID();
+
+        var user = aUser()
+                .withUserId(userId)
+                .withUsername("fulano")
+                .withEmail("fulano@mail.com")
+                .withPassword("fulano123")
+                .withFullName("Fulano da Silva")
+                .withPhoneNumber("(11)1111-1111")
+                .withCpf("111.111.111-11")
+                .build();
+
+        when(this.userRepository.findById(userId))
+                .thenReturn(Optional.of(user));
+
+        var expectedUser = this.userService.findById(userId);
+
+        verify(this.userRepository, times(1))
+                .findById(userId);
+
+        assertThat(expectedUser)
+                .isNotEmpty();
+    }
+
+    @Test
+    @DisplayName("Should return an ampty user optional with nonexistent id")
+    void shouldReturnAnEmptyUserOptionalWithNonexistentId() {
+        var userId = UUID.randomUUID();
+
+        when(this.userRepository.findById(userId))
+                .thenReturn(Optional.empty());
+
+        var expectedUser = this.userService.findById(userId);
+
+        verify(this.userRepository, times(1))
+                .findById(userId);
+
+        assertThat(expectedUser)
+                .isEmpty();
+    }
+
 }

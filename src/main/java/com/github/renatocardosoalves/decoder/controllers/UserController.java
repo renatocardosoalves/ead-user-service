@@ -4,12 +4,10 @@ import com.github.renatocardosoalves.decoder.models.UserModel;
 import com.github.renatocardosoalves.decoder.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @RestController
@@ -22,6 +20,13 @@ public class UserController {
     @GetMapping
     public ResponseEntity<List<UserModel>> findAll() {
         return ResponseEntity.ok(this.userService.findAll());
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<UserModel> findById(@PathVariable UUID userId) {
+        return this.userService.findById(userId)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
 }
