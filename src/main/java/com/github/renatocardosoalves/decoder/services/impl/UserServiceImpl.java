@@ -5,6 +5,7 @@ import com.github.renatocardosoalves.decoder.repositories.UserRepository;
 import com.github.renatocardosoalves.decoder.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +25,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<UserModel> findById(UUID userId) {
         return this.userRepository.findById(userId);
+    }
+
+    @Transactional
+    @Override
+    public void delete(UserModel userModel) {
+        this.userRepository.delete(userModel);
     }
 
 }

@@ -61,8 +61,8 @@ class UserServiceImplTest {
     }
 
     @Test
-    @DisplayName("Should return a user optional with existing id")
-    void shouldReturnAUserOptionalWithExistingId() {
+    @DisplayName("Should return a user optional when calling findById with an existing id")
+    void shouldReturnAUserOptionalWhenCallingFindByIdWithAnExistingId() {
         var userId = UUID.randomUUID();
 
         var user = aUser()
@@ -88,8 +88,8 @@ class UserServiceImplTest {
     }
 
     @Test
-    @DisplayName("Should return an ampty user optional with nonexistent id")
-    void shouldReturnAnEmptyUserOptionalWithNonexistentId() {
+    @DisplayName("Should return an empty user optional when calling findById with a non-existent id")
+    void shouldReturnAnEmptyUserOptionalWhenCallingFindByIdWithANonExistentId() {
         var userId = UUID.randomUUID();
 
         when(this.userRepository.findById(userId))
@@ -102,6 +102,29 @@ class UserServiceImplTest {
 
         assertThat(expectedUser)
                 .isEmpty();
+    }
+
+    @Test
+    @DisplayName("Should delete a user when calling delete")
+    void shouldDeleteAUserWhenCallingDelete() {
+        var user = aUser()
+                .withUserId(UUID.randomUUID())
+                .withUsername("fulano")
+                .withEmail("fulano@mail.com")
+                .withPassword("fulano123")
+                .withFullName("Fulano da Silva")
+                .withPhoneNumber("(11)1111-1111")
+                .withCpf("111.111.111-11")
+                .build();
+
+        doNothing()
+                .when(this.userRepository)
+                .delete(user);
+
+        this.userService.delete(user);
+
+        verify(this.userRepository, times(1))
+                .delete(user);
     }
 
 }

@@ -29,4 +29,14 @@ public class UserController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<?> deleteById(@PathVariable UUID userId) {
+        return this.userService.findById(userId)
+                .map(u -> {
+                    this.userService.delete(u);
+                    return ResponseEntity.noContent().build();
+                })
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
 }
